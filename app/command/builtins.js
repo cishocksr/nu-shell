@@ -285,15 +285,36 @@ function executeHistory(args, outputStream, historyManager) {
  * All builtins return a Promise so they can be used
  * consistently alongside external commands in pipelines.
  *
+ * If inputStream is provided (i.e. this builtin is not the first command
+ * in a pipeline), we resume() it to drain the data. This is critical:
+ * without draining, the upstream command's stdout pipe stays open and
+ * the pipeline never completes. None of the current builtins read from
+ * stdin, so we discard the data here. A future builtin that needs to
+ * consume stdin (e.g. a "cat" builtin) would read from inputStream
+ * instead of resuming it.
+ *
  * Note: "exit" is not handled here - see index.js
  *
  * @param {string} command - The builtin command name
  * @param {string[]} args - Arguments to the command
+ * @param {import("stream").Readable|null} inputStream - Input stream from previous pipeline stage, or null
  * @param {import("stream").Writable|null} outputStream - Output stream or null for stdout
  * @param {HistoryManager} historyManager - The history manager instance
  * @returns {Promise<void>}
  */
-function executeBuiltin(command, args, outputStream, historyManager) {
+function executeBuiltin(
+  command,
+  args,
+  inputStream,
+  outputStream,
+  historyManager,
+) {
+  // Drain the input stream so the upstream pipe closes cleanly.
+  // resume() puts the stream into flowing mode, discarding all data.
+  if (inputStream) {
+    inputStream.resume();
+  }
+
   switch (command) {
     case "echo":
       return executeEcho(args, outputStream);

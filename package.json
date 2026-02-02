@@ -11,10 +11,10 @@
   "license": "MIT",
   "author": "Christopher Shockley",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js",
+    "start": "node app/main.js",
+    "dev": "node --watch app/main.js",
     "check": "biome check .",
     "format": "biome format --write .",
     "lint": "biome lint .",
