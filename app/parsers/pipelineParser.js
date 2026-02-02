@@ -19,40 +19,40 @@
  * @returns {string[][]} - Array of command arrays
  */
 function parsePipeline(tokens) {
-  const commands = []; // Array of commands (each command is an array)
-  let currentCommand = []; // The command we're currently building
+	const commands = []; // Array of commands (each command is an array)
+	let currentCommand = []; // The command we're currently building
 
-  // Walk through each token
-  for (const token of tokens) {
-    if (token === "|") {
-      // Found a pipe! Save current command and start new one
-      if (currentCommand.length === 0) {
-        console.log("syntax error near unexpected token '|'");
-        return [];
-      }
-      commands.push(currentCommand);
-      currentCommand = [];
-    } else {
-      // Regular token - add to current command
-      currentCommand.push(token);
-    }
-  }
+	// Walk through each token
+	for (const token of tokens) {
+		if (token === "|") {
+			// Found a pipe! Save current command and start new one
+			if (currentCommand.length === 0) {
+				console.log("syntax error near unexpected token '|'");
+				return [];
+			}
+			commands.push(currentCommand);
+			currentCommand = [];
+		} else {
+			// Regular token - add to current command
+			currentCommand.push(token);
+		}
+	}
 
-  //   Check if there's a command after the last pipe
-  if (currentCommand.length === 0 && commands.length > 0) {
-    // We had a pipe but nothing after it
-    console.log("syntax error near unexpected token '|'");
-    return [];
-  }
+	//   Check if there's a command after the last pipe
+	if (currentCommand.length === 0 && commands.length > 0) {
+		// We had a pipe but nothing after it
+		console.log("syntax error near unexpected token '|'");
+		return [];
+	}
 
-  // Don't forget the last command!
-  if (currentCommand.length > 0) {
-    commands.push(currentCommand);
-  }
+	// Don't forget the last command!
+	if (currentCommand.length > 0) {
+		commands.push(currentCommand);
+	}
 
-  return commands;
+	return commands;
 }
 
 module.exports = {
-  parsePipeline,
+	parsePipeline,
 };

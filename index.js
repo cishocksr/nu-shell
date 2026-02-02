@@ -1,7 +1,7 @@
 const { spawn } = require("node:child_process");
 const { PassThrough } = require("node:stream");
-const { findCommandInPath } = require("../utils/pathUtils");
-const { isBuiltin, executeBuiltin } = require("./builtins");
+const { findCommandInPath } = require("./app/utils/pathUtils");
+const { isBuiltin, executeBuiltin } = require("./app/command/builtins");
 
 /**
  * Represents a builtin command running inside a pipeline.
@@ -23,14 +23,6 @@ const { isBuiltin, executeBuiltin } = require("./builtins");
  * This lets us check entry.isBuiltin and TypeScript will narrow
  * the type automatically in each branch.
  * @typedef {BuiltinEntry | ExternalEntry} PipelineEntry
- */
-
-/**
- * @typedef {object} HistoryManager
- * @property {function(string): {success: boolean}} readFromFile - Reads history from a file
- * @property {function(string): {success: boolean}} writeToFile - Writes all history to a file
- * @property {function(string): {success: boolean}} appendToFile - Appends new history to a file
- * @property {function(): string[]} getHistory - Returns the full history array
  */
 
 /**
@@ -160,7 +152,7 @@ function executeSingleCommand(command, args, redirectionInfo, onComplete) {
  * builtins (which use streams instead of child processes).
  *
  * @param {string[][]} commands - Array of command arrays from parsePipeline
- * @param {HistoryManager} historyManager - The history manager instance
+ * @param {import("./app/command/builtins").HistoryManager} historyManager - The history manager instance
  * @param {function} onComplete - Callback when the entire pipeline finishes
  */
 function executePipeline(commands, historyManager, onComplete) {
@@ -196,8 +188,6 @@ function executePipeline(commands, historyManager, onComplete) {
 			}
 
 			// Execute the builtin - it writes to outputStream (or stdout if null)
-			// Pass inputStream so the builtin (or executeBuiltin itself) can drain it,
-			// otherwise the upstream command's stdout pipe stays open and the pipeline hangs.
 			const promise = executeBuiltin(
 				command,
 				args,

@@ -1,5 +1,5 @@
-const fs = require("fs");
-const pathModule = require("path");
+const fs = require("node:fs");
+const pathModule = require("node:path");
 
 /**
  * Finds a command in the system PATH environment variable
@@ -13,28 +13,27 @@ const pathModule = require("path");
  */
 
 function findCommandInPath(commandName) {
-  const path = process.env.PATH || "";
+	const path = process.env.PATH || "";
 
-  const pathDirs = path.split(":").filter((dir) => dir.length > 0);
+	const pathDirs = path.split(":").filter((dir) => dir.length > 0);
 
-  for (const dir of pathDirs) {
-    const fullPath = pathModule.join(dir, commandName);
+	for (const dir of pathDirs) {
+		const fullPath = pathModule.join(dir, commandName);
 
-    try {
-      if (fs.existsSync(fullPath) && fs.statSync(fullPath).isFile()) {
-        const stats = fs.statSync(fullPath);
+		try {
+			if (fs.existsSync(fullPath)) {
+				const stats = fs.statSync(fullPath);
 
-        if (stats.mode & 0o111) {
-          return fullPath;
-        }
-      }
-    } catch (e) {
-      // Intentionally ignore errors (permission denied, broken symlinks, etc.)
-      // We want to continue checking other PATH directories
-      // No action needed - just skip to next directory
-    }
-  }
-  return null;
+				if (stats.isFile() && stats.mode & 0o111) {
+					return fullPath;
+				}
+			}
+		} catch (_e) {
+			// Skip files we can't access: permission denied, broken symlinks, etc.
+			// Continue checking remaining PATH directories
+		}
+	}
+	return null;
 }
 
 module.exports = { findCommandInPath };

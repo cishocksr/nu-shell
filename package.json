@@ -1,27 +1,27 @@
 {
-  "name": "nu-shell",
-  "version": "0.1.0",
-  "description": "A Unix shell implementation built from scratch in Node.js",
-  "keywords": [
-    "shell",
-    "unix",
-    "cli",
-    "terminal"
-  ],
-  "license": "MIT",
-  "author": "Christopher Shockley",
-  "type": "commonjs",
-  "main": "main.js",
-  "scripts": {
-    "start": "node app/index.js",
-    "dev": "node --watch app/index.js",
-    "check": "biome check .",
-    "format": "biome format --write .",
-    "lint": "biome lint .",
-    "fix": "biome check --write ."
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.3.13",
-    "@types/node": "^25.0.10"
-  }
+	"name": "nu-shell",
+	"version": "0.1.0",
+	"description": "A Unix shell implementation built from scratch in Node.js",
+	"keywords": [
+		"shell",
+		"unix",
+		"cli",
+		"terminal"
+	],
+	"license": "MIT",
+	"author": "Christopher Shockley",
+	"type": "commonjs",
+	"main": "main.js",
+	"scripts": {
+		"start": "node app/index.js",
+		"dev": "node --watch app/index.js",
+		"check": "biome check .",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"fix": "biome check --write ."
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.13",
+		"@types/node": "^25.0.10"
+	}
 }

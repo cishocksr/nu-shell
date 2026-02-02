@@ -18,27 +18,27 @@
  */
 
 function findLongestCommonPrefix(string) {
-  // Edge cases first
-  if (string.length === 0) return "";
-  if (string.length === 1) return string[0];
+	// Edge cases first
+	if (string.length === 0) return "";
+	if (string.length === 1) return string[0];
 
-  // Start with the entire first string as our candidate
-  let prefix = string[0];
+	// Start with the entire first string as our candidate
+	let prefix = string[0];
 
-  // Compare with each subsequent string
-  for (let i = 1; i < string.length; i++) {
-    // Keep shrinking prefix until this string starts with it
-    // indexOf checks if prefix appears at the START (position 0)
-    while (string[i].indexOf(prefix) !== 0) {
-      // Remove last character from prefix
-      prefix = prefix.substring(0, prefix.length - 1);
+	// Compare with each subsequent string
+	for (let i = 1; i < string.length; i++) {
+		// Keep shrinking prefix until this string starts with it
+		// indexOf checks if prefix appears at the START (position 0)
+		while (string[i].indexOf(prefix) !== 0) {
+			// Remove last character from prefix
+			prefix = prefix.substring(0, prefix.length - 1);
 
-      // If we've removed everything, there's no common prefix
-      if (prefix === "") return "";
-    }
-  }
+			// If we've removed everything, there's no common prefix
+			if (prefix === "") return "";
+		}
+	}
 
-  return prefix;
+	return prefix;
 }
 
 module.exports = { findLongestCommonPrefix };
