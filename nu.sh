@@ -1,3 +1,3 @@
-set -e
+#!/bin/sh
 
-exec node app/main.js "$@"
+exec node app/index.js "$@"

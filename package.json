@@ -13,8 +13,8 @@
   "type": "commonjs",
   "main": "main.js",
   "scripts": {
-    "start": "node app/main.js",
-    "dev": "node --watch app/main.js",
+    "start": "node app/index.js",
+    "dev": "node --watch app/index.js",
     "check": "biome check .",
     "format": "biome format --write .",
     "lint": "biome lint .",
