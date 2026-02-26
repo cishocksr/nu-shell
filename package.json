@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"author": "Christopher Shockley",
 	"type": "commonjs",
-	"main": "main.js",
+	"main": "app/index.js",
 	"scripts": {
 		"start": "node app/index.js",
 		"dev": "node --watch app/index.js",

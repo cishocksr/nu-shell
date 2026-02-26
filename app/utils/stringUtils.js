@@ -1,7 +1,7 @@
 /**
- * Finds the longest comon prefix among an array of strings
+ * Finds the longest common prefix among an array of strings
  *
- * Used for tab completion: when you type "ec" and both "echo" and "ecryptfs" match. we auto-complete to "ec" (the longest common part).
+ * Used for tab completion: when you type "ec" and both "echo" and "ecryptfs" match, we auto-complete to "ec" (the longest common part).
  *
  * How it Works:
  * 1. Start with the first string as our candidate prefix
@@ -13,23 +13,23 @@
  * ["hello", "help", "helmet"] -> "hel"
  * ["cat", "dog"] -> "" (no common prefix)
  *
- * @param {string[]} string - Array of strings to compare
+ * @param {string[]} strings - Array of strings to compare
  * @returns {string} - The longest common prefix
  */
 
-function findLongestCommonPrefix(string) {
+function findLongestCommonPrefix(strings) {
 	// Edge cases first
-	if (string.length === 0) return "";
-	if (string.length === 1) return string[0];
+	if (strings.length === 0) return "";
+	if (strings.length === 1) return strings[0];
 
 	// Start with the entire first string as our candidate
-	let prefix = string[0];
+	let prefix = strings[0];
 
 	// Compare with each subsequent string
-	for (let i = 1; i < string.length; i++) {
+	for (let i = 1; i < strings.length; i++) {
 		// Keep shrinking prefix until this string starts with it
 		// indexOf checks if prefix appears at the START (position 0)
-		while (string[i].indexOf(prefix) !== 0) {
+		while (strings[i].indexOf(prefix) !== 0) {
 			// Remove last character from prefix
 			prefix = prefix.substring(0, prefix.length - 1);
 

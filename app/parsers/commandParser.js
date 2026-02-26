@@ -20,6 +20,7 @@ function parseCommandLine(input) {
 	let currentToken = "";
 	let inSingleQuotes = false;
 	let inDoubleQuotes = false;
+	let tokenStarted = false; // Tracks whether quotes opened a token (needed for empty strings like '')
 	let i = 0;
 
 	while (i < input.length) {
@@ -66,6 +67,7 @@ function parseCommandLine(input) {
 		// SECTION 3: Handle single quotes
 		if (char === "'") {
 			if (!inDoubleQuotes) {
+				tokenStarted = true;
 				if (inSingleQuotes) {
 					if (i + 1 < input.length && input[i + 1] === "'") {
 						i += 2;
@@ -94,6 +96,7 @@ function parseCommandLine(input) {
 		// SECTION 4: Handle double quotes
 		if (char === '"') {
 			if (!inSingleQuotes) {
+				tokenStarted = true;
 				if (inDoubleQuotes) {
 					if (i + 1 < input.length && input[i + 1] === '"') {
 						i += 2;
@@ -128,9 +131,10 @@ function parseCommandLine(input) {
 			// Outside quotes: check if it's a space
 			if (char === " " || char === "\t") {
 				// Found a space - finish the current token
-				if (currentToken.length > 0) {
+				if (currentToken.length > 0 || tokenStarted) {
 					tokens.push(currentToken);
 					currentToken = "";
+					tokenStarted = false;
 				}
 				// Skip all consecutive whitespace
 				while (i < input.length && (input[i] === " " || input[i] === "\t")) {
@@ -144,8 +148,8 @@ function parseCommandLine(input) {
 		}
 	}
 
-	// Add the last token if one exists
-	if (currentToken.length > 0) {
+	// Add the last token if one exists (tokenStarted handles empty quoted strings like '')
+	if (currentToken.length > 0 || tokenStarted) {
 		tokens.push(currentToken);
 	}
 

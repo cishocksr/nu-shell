@@ -4,7 +4,7 @@ const pathModule = require("node:path");
 /**
  * Finds a command in the system PATH environment variable
  *
- * Thin of PATH like a phone book of program locations.
+ * Think of PATH like a phone book of program locations.
  * When you type "ls", this function searches through PATH
  * to find where the actual "ls" program is started.
  *

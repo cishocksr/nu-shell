@@ -177,8 +177,10 @@ rl.on("line", (line) => {
 
 	// "exit" is handled here, not in builtins, because it needs to
 	// control the shell's lifecycle (close readline, save history, exit)
-	if (trimmed === "exit") {
-		handleExit();
+	if (trimmed === "exit" || trimmed.startsWith("exit ")) {
+		const exitArgs = trimmed.split(/\s+/);
+		const exitCode = exitArgs.length > 1 ? parseInt(exitArgs[1], 10) : 0;
+		handleExit(Number.isNaN(exitCode) ? 0 : exitCode);
 		return;
 	}
 
@@ -206,6 +208,13 @@ rl.on("line", (line) => {
 	// No pipe — single command. Check for redirection first.
 	const { hasRedirection, commandTokens, redirectFile, redirectFd, isAppend } =
 		parseRedirection(tokens);
+
+	// Check for missing redirect target (e.g. "echo hello >")
+	if (hasRedirection && !redirectFile) {
+		console.log("syntax error near unexpected token 'newline'");
+		rl.prompt();
+		return;
+	}
 
 	// After redirection parsing, commandTokens has the actual command
 	if (commandTokens.length === 0) {
@@ -243,14 +252,19 @@ rl.on("line", (line) => {
 /**
  * Saves history to HISTFILE and exits cleanly.
  * Called when user types "exit" or presses Ctrl-D.
+ *
+ * @param {number} code - The exit code (default 0)
  */
-function handleExit() {
+function handleExit(code = 0) {
 	historyManager.appendToFile(HISTFILE);
 	rl.close();
-	process.exit(0);
+	process.exit(code);
 }
 
 // Ctrl-D (EOF) — treat same as "exit"
+// Note: handleExit also calls rl.close(), but process.exit() runs
+// before this handler fires in that path. This handler covers
+// the Ctrl-D case where close is triggered directly by readline.
 rl.on("close", () => {
 	historyManager.appendToFile(HISTFILE);
 	process.exit(0);

@@ -131,7 +131,9 @@ function executeCd(args, outputStream) {
 		process.chdir(targetDir);
 	} catch (_err) {
 		// chdir throws if the directory doesn't exist
+		// writeOutput ends the stream, so we return immediately to avoid double-end
 		writeOutput(`cd: ${targetDir}: No such file or directory\n`, outputStream);
+		return Promise.resolve();
 	}
 
 	// cd produces no output on success, but we still need to end the stream

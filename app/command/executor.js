@@ -1,3 +1,4 @@
+const fs = require("node:fs");
 const { spawn } = require("node:child_process");
 const { PassThrough } = require("node:stream");
 const { findCommandInPath } = require("../utils/pathUtils");
@@ -54,7 +55,6 @@ const { isBuiltin, executeBuiltin } = require("./builtins");
  * @param {function} onComplete - Callback when the command finishes
  */
 function executeSingleCommand(command, args, redirectionInfo, onComplete) {
-	const fs = require("node:fs");
 
 	// Find the command on disk
 	const fullPath = findCommandInPath(command);
